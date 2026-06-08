@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Payment{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Checkout — step 2 of 3: Payment</h1>
+  <form method="post" action="/checkout/payment">
+    <label for="card_number">Card number</label>
+    <input id="card_number" name="card_number" type="text" value="{{ data.card_number or '' }}"
+           placeholder="4111 1111 1111 1111" aria-label="Card number">
+    <label for="card_name">Name on card</label>
+    <input id="card_name" name="card_name" type="text" value="{{ data.card_name or '' }}" aria-label="Name on card">
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <a href="/checkout/shipping"><button type="button" class="secondary">Back</button></a>
+    <button type="submit">Review order</button>
+  </form>
+</div>
+{% endblock %}

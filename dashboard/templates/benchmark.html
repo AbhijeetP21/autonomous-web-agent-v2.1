@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Benchmark{% endblock %}
+{% block content %}
+<h1>Benchmark</h1>
+{% if not report %}
+  <p class="muted">No benchmark report yet. Run:
+     <code>python -m benchmark.run_benchmark --runs 5</code></p>
+{% else %}
+<p class="muted">Generated {{ report.generated_at[:19] }} ·
+   <code>{{ report.provider }}/{{ report.model }}</code> ·
+   {{ report.runs_per_task }} runs/task</p>
+
+<div class="cards">
+  <div class="stat"><div class="n">{{ '%.0f' % (report.overall.success_rate * 100) }}%</div>
+       <div class="l">overall success ({{ report.overall.successes }}/{{ report.overall.runs }})</div></div>
+  <div class="stat"><div class="n">{{ report.overall.mean_steps_on_success }}</div>
+       <div class="l">mean steps</div></div>
+  <div class="stat"><div class="n">{{ report.overall.recovery_triggered }}</div>
+       <div class="l">runs with recovery</div></div>
+</div>
+
+<table>
+  <thead><tr><th>Task</th><th>Success</th><th>Mean steps</th>
+             <th>Recovery fired</th><th>Recovery success</th></tr></thead>
+  <tbody>
+  {% for t in report.tasks %}
+    <tr>
+      <td>{{ t.id }}<div class="muted">{{ t.description }}</div></td>
+      <td>{{ '%.0f' % (t.metrics.success_rate * 100) }}%
+          ({{ t.metrics.successes }}/{{ t.metrics.runs }})</td>
+      <td>{{ t.metrics.mean_steps_on_success }}</td>
+      <td>{{ t.metrics.recovery_triggered }}</td>
+      <td>{% if t.metrics.recovery_success_rate is none %}—{% else %}
+          {{ '%.0f' % (t.metrics.recovery_success_rate * 100) }}%{% endif %}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

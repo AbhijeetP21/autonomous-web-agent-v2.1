@@ -1,0 +1,51 @@
+# Benchmark task suite. {base} is replaced with the local sandbox base URL.
+# Tasks tagged `public: true` hit a real external site (saucedemo.com) and are
+# skipped unless the harness is run with --include-public.
+
+- id: todo_add_complete
+  description: Add a todo and mark it complete
+  goal: "Add a todo item called 'buy milk', then mark that item as done."
+  target: "{base}/todo"
+  success_check:
+    type: selector_min
+    selector: '#todo-list li[data-status="done"]'
+    count: 1
+
+- id: checkout_complete
+  description: Complete a 3-step checkout
+  goal: >
+    Complete the checkout. Go to checkout, fill the shipping form with full name
+    'Ada Lovelace' and address '1 Analytical Engine Way', continue to payment, fill the
+    card number '4111111111111111' and name on card 'Ada Lovelace', review, then place the order.
+  target: "{base}/shop"
+  success_check:
+    type: text_present
+    value: "Order confirmed"
+
+- id: login_dashboard
+  description: Log in and reach the dashboard
+  goal: "Log in with username 'standard_user' and password 'secret_sauce', then reach the dashboard."
+  target: "{base}/login"
+  success_check:
+    type: text_present
+    value: "Welcome, standard_user"
+
+- id: saucedemo_login
+  description: Log into saucedemo (public site — generalization)
+  public: true
+  goal: "Log in to the site using username 'standard_user' and password 'secret_sauce'."
+  target: "https://www.saucedemo.com/"
+  success_check:
+    type: url_contains
+    value: "inventory"
+
+- id: saucedemo_add_to_cart
+  description: Log in and add an item to the cart on saucedemo (public site)
+  public: true
+  goal: >
+    Log in with username 'standard_user' and password 'secret_sauce', add the
+    'Sauce Labs Backpack' to the cart, then open the shopping cart.
+  target: "https://www.saucedemo.com/"
+  success_check:
+    type: url_contains
+    value: "cart"

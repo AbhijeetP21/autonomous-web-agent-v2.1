@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Runs{% endblock %}
+{% block content %}
+<h1>Runs</h1>
+<div class="cards">
+  <div class="stat"><div class="n">{{ stats.total }}</div><div class="l">completed runs</div></div>
+  <div class="stat"><div class="n">{{ '%.0f' % (stats.success_rate * 100) }}%</div>
+       <div class="l">success rate ({{ stats.successes }}/{{ stats.total }})</div></div>
+  <div class="stat"><div class="n">{{ stats.avg_steps }}</div><div class="l">avg steps</div></div>
+  <div class="stat"><div class="n">{{ stats.recovered_runs }}</div>
+       <div class="l">runs with recovery</div></div>
+</div>
+
+<table>
+  <thead><tr><th>#</th><th>Status</th><th>Steps</th><th>Rec.</th><th>Goal</th><th>Started</th></tr></thead>
+  <tbody>
+  {% for r in runs %}
+    <tr>
+      <td><a href="/runs/{{ r.id }}">{{ r.id }}</a></td>
+      <td><span class="badge s-{{ r.status }}">{{ r.status }}</span></td>
+      <td>{{ r.total_steps }}</td>
+      <td>{{ r.recovered }}</td>
+      <td><a href="/runs/{{ r.id }}">{{ r.goal[:70] }}</a></td>
+      <td class="muted">{{ (r.started_at or '')[:19] }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="6" class="muted">No runs yet. Try: <code>web-agent run "…" --target …</code></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,37 @@
+# Per-project toolchain, pinned via mise.
+# `mise install` installs Python and creates the .venv; tasks run inside it.
+
+[tools]
+python = "3.12"
+
+[env]
+# Auto-create and activate a project-local virtualenv.
+_.python.venv = { path = ".venv", create = true }
+
+[tasks.install]
+description = "Install the package (editable) + dev extras and the Chromium browser"
+run = [
+  "python -m pip install --upgrade pip",
+  "pip install -e .[dev]",
+  "playwright install chromium",
+]
+
+[tasks.sandbox]
+description = "Run the local sandbox site"
+run = "python -m sandbox.server"
+
+[tasks.dashboard]
+description = "Run the read-only run-traces dashboard"
+run = "uvicorn dashboard.app:app --reload --port 8001"
+
+[tasks.test]
+description = "Run the test suite"
+run = "pytest -q"
+
+[tasks.lint]
+description = "Lint with ruff"
+run = "ruff check ."
+
+[tasks.benchmark]
+description = "Run the benchmark harness"
+run = "python -m benchmark.run_benchmark --runs 5"

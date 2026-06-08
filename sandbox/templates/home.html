@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Agent Sandbox</h1>
+  <p class="muted">A deterministic, offline multi-page site for exercising the autonomous web agent.
+     Three flows, all with stable, accessible labels.</p>
+  <ul>
+    <li><a href="/todo">📝 Todo app</a> — add, complete, and delete tasks.</li>
+    <li><a href="/shop">🛒 Checkout</a> — a multi-step form (shipping → payment → confirm).</li>
+    <li><a href="/login">🔑 Login</a> — sign in then reach the dashboard.</li>
+  </ul>
+</div>
+{% endblock %}

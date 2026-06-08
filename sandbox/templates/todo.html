@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Todo{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Todo list</h1>
+  <label for="new-todo">New todo</label>
+  <input id="new-todo" name="new-todo" type="text" placeholder="What needs doing?" aria-label="New todo">
+  <button id="add-todo" type="button">Add</button>
+  <ul id="todo-list" aria-label="Todo items"></ul>
+  <p id="empty-hint" class="muted">No items yet.</p>
+</div>
+
+<script>
+  // Deterministic client-side todo state (resets on reload).
+  const list = document.getElementById('todo-list');
+  const input = document.getElementById('new-todo');
+  const emptyHint = document.getElementById('empty-hint');
+
+  function refreshHint() {
+    emptyHint.style.display = list.children.length ? 'none' : 'block';
+  }
+
+  function addTodo() {
+    const text = input.value.trim();
+    if (!text) return;
+    const li = document.createElement('li');
+    li.dataset.status = 'pending';
+
+    const span = document.createElement('span');
+    span.className = 'todo-text';
+    span.textContent = text;
+
+    const doneBtn = document.createElement('button');
+    doneBtn.type = 'button';
+    doneBtn.className = 'secondary';
+    doneBtn.textContent = 'Done';
+    doneBtn.setAttribute('aria-label', 'Mark "' + text + '" done');
+    doneBtn.addEventListener('click', () => {
+      li.classList.add('done');
+      li.dataset.status = 'done';
+      doneBtn.textContent = 'Completed';
+      doneBtn.disabled = true;
+      // Keep the accessible name truthful once completed (it's no longer a "mark done" control).
+      doneBtn.setAttribute('aria-label', '"' + text + '" is completed');
+    });
+
+    const delBtn = document.createElement('button');
+    delBtn.type = 'button';
+    delBtn.className = 'secondary';
+    delBtn.textContent = 'Delete';
+    delBtn.setAttribute('aria-label', 'Delete "' + text + '"');
+    delBtn.addEventListener('click', () => { li.remove(); refreshHint(); });
+
+    li.append(span, doneBtn, delBtn);
+    list.appendChild(li);
+    input.value = '';
+    refreshHint();
+  }
+
+  document.getElementById('add-todo').addEventListener('click', addTodo);
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') addTodo(); });
+  refreshHint();
+</script>
+{% endblock %}

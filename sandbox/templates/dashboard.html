@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="card">
+  <h1 class="ok" id="welcome">Welcome, {{ username }}!</h1>
+  <p class="muted">You are signed in. This is the protected dashboard.</p>
+  <a href="/logout"><button type="button" class="secondary">Log out</button></a>
+</div>
+{% endblock %}

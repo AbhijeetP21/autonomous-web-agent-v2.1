@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Sandbox{% endblock %} · Agent Sandbox</title>
+  <style>
+    :root { --bg:#0f172a; --card:#1e293b; --ink:#e2e8f0; --muted:#94a3b8;
+            --accent:#38bdf8; --ok:#22c55e; --err:#f87171; --line:#334155; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--ink); }
+    header { background:var(--card); border-bottom:1px solid var(--line); padding:12px 24px;
+             display:flex; gap:20px; align-items:center; }
+    header a { color:var(--accent); text-decoration:none; font-weight:600; }
+    header .brand { color:var(--ink); font-weight:800; margin-right:auto; }
+    main { max-width:680px; margin:32px auto; padding:0 20px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px;
+            padding:24px; margin-bottom:20px; }
+    h1 { margin-top:0; font-size:22px; }
+    label { display:block; margin:12px 0 4px; color:var(--muted); font-size:14px; }
+    input, select { width:100%; padding:10px 12px; border-radius:8px; border:1px solid var(--line);
+                    background:#0b1220; color:var(--ink); font-size:15px; }
+    button { margin-top:16px; padding:10px 18px; border:0; border-radius:8px; cursor:pointer;
+             background:var(--accent); color:#06283d; font-weight:700; font-size:15px; }
+    button.secondary { background:var(--line); color:var(--ink); }
+    .error { color:var(--err); margin-top:10px; font-size:14px; }
+    .ok { color:var(--ok); font-weight:700; }
+    ul { list-style:none; padding:0; }
+    li { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); }
+    li.done .todo-text { text-decoration:line-through; color:var(--muted); }
+    .todo-text { flex:1; }
+    .muted { color:var(--muted); font-size:14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="brand">🤖 Agent Sandbox</span>
+    <a href="/">Home</a>
+    <a href="/todo">Todo</a>
+    <a href="/shop">Shop</a>
+    <a href="/login">Login</a>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

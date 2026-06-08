@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Run {{ run.id }}{% endblock %}
+{% block content %}
+<p><a href="/">← all runs</a></p>
+<h1>Run {{ run.id }} <span class="badge s-{{ run.status }}">{{ run.status }}</span></h1>
+<p class="muted">{{ run.goal }}<br>
+  target: <code>{{ run.target_url }}</code> ·
+  {{ run.provider }}/{{ run.model }} ·
+  steps: {{ run.total_steps }} · recoveries: {{ run.recovered }} ·
+  started {{ (run.started_at or '')[:19] }}</p>
+{% if run.error %}<p class="err">error: {{ run.error }}</p>{% endif %}
+
+<h2>Trace</h2>
+{% for s in steps %}
+<div class="step">
+  {% if s.screenshot_path %}
+    <img src="/shot/{{ run.id }}/{{ s.screenshot_path.split('/')[-1].split('\\')[-1] }}"
+         alt="step {{ s.step_index }} screenshot" loading="lazy">
+  {% endif %}
+  <div class="body">
+    <div class="act">#{{ s.step_index }} · {{ s.action_type or '—' }}
+      <span class="muted">({{ s.latency_ms }}ms)</span></div>
+    {% if s.reasoning %}<p><span class="muted">reasoning:</span> {{ s.reasoning }}</p>{% endif %}
+    {% if s.action_args %}<p class="muted">args: <code>{{ s.action_args }}</code></p>{% endif %}
+    <p><span class="muted">outcome:</span> {{ s.outcome }}</p>
+    {% if s.error %}<p class="err">error: {{ s.error }}</p>{% endif %}
+    <p class="muted">url: {{ s.page_url }}</p>
+  </div>
+</div>
+{% else %}
+<p class="muted">No steps recorded.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Shipping{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Checkout — step 1 of 3: Shipping</h1>
+  <form method="post" action="/checkout/shipping">
+    <label for="full_name">Full name</label>
+    <input id="full_name" name="full_name" type="text" value="{{ data.full_name or '' }}" aria-label="Full name">
+    <label for="address">Shipping address</label>
+    <input id="address" name="address" type="text" value="{{ data.address or '' }}" aria-label="Shipping address">
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <button type="submit">Continue to payment</button>
+  </form>
+</div>
+{% endblock %}

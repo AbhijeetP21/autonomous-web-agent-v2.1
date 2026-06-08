@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtualenv / mise
+.venv/
+.mise.local.toml
+
+# Env / secrets
+.env
+
+# Runtime data
+data/
+docs/video/
+docs/palette.png
+benchmark/results/*.json
+benchmark/results/*.md
+!benchmark/results/.gitkeep
+
+# Test / tooling caches
+.pytest_cache/
+.ruff_cache/
+
+# Claude local state (keep launch.json)
+.claude/*.lock
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store

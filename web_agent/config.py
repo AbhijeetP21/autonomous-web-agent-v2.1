@@ -25,7 +25,9 @@ class Settings(BaseSettings):
     agent_max_steps: int = Field(default=25)
     agent_retry_max: int = Field(default=3)
     agent_loop_window: int = Field(default=3)
-    agent_domain_allowlist: str = Field(default="localhost,127.0.0.1,www.saucedemo.com")
+    agent_domain_allowlist: str = Field(
+        default="localhost,127.0.0.1,www.saucedemo.com,the-internet.herokuapp.com"
+    )
     agent_confirm_sensitive: bool = Field(default=False)
     agent_headless: bool = Field(default=True)
 

@@ -49,3 +49,22 @@
   success_check:
     type: url_contains
     value: "cart"
+
+- id: herokuapp_login
+  description: Log into the-internet secure area (public site — generalization)
+  public: true
+  goal: "Log in using the username 'tomsmith' and the password 'SuperSecretPassword!'."
+  target: "https://the-internet.herokuapp.com/login"
+  success_check:
+    type: text_present
+    value: "You logged into a secure area"
+
+- id: herokuapp_add_remove
+  description: Add a dynamic element on the-internet (public site — dynamic DOM)
+  public: true
+  goal: "Click the 'Add Element' button to add a Delete button to the page."
+  target: "https://the-internet.herokuapp.com/add_remove_elements/"
+  success_check:
+    type: selector_min
+    selector: "button.added-manually"
+    count: 1

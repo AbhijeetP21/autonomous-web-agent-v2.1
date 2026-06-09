@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% import "_icons.html" as ic %}
 {% block title %}Todo{% endblock %}
 {% block content %}
 <div class="card">
-  <h1>Todo list</h1>
+  <h1>{{ ic.icon('check-square', 18) }} Todo list</h1>
   <label for="new-todo">New todo</label>
   <input id="new-todo" name="new-todo" type="text" placeholder="What needs doing?" aria-label="New todo">
-  <button id="add-todo" type="button">Add</button>
+  <button id="add-todo" type="button">{{ ic.icon('plus', 15) }} Add</button>
   <ul id="todo-list" aria-label="Todo items"></ul>
   <p id="empty-hint" class="muted">No items yet.</p>
 </div>

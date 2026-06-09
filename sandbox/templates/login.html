@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% import "_icons.html" as ic %}
 {% block title %}Login{% endblock %}
 {% block content %}
 <div class="card">
-  <h1>Sign in</h1>
+  <h1>{{ ic.icon('lock', 18) }} Sign in</h1>
   <p class="muted">Use <code>standard_user</code> / <code>secret_sauce</code>.</p>
   <form method="post" action="/login">
     <label for="username">Username</label>
@@ -10,7 +11,7 @@
     <label for="password">Password</label>
     <input id="password" name="password" type="password" aria-label="Password">
     {% if error %}<p class="error" id="login-error">{{ error }}</p>{% endif %}
-    <button type="submit">Login</button>
+    <button type="submit">{{ ic.icon('login', 15) }} Login</button>
   </form>
 </div>
 {% endblock %}

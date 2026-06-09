@@ -31,7 +31,8 @@ def _repo() -> Repository:
 def index(request: Request):
     repo = _repo()
     return TEMPLATES.TemplateResponse(
-        request, "index.html", {"runs": repo.list_runs(200), "stats": repo.stats()}
+        request, "index.html",
+        {"runs": repo.list_runs(200), "stats": repo.stats(), "active": "runs"},
     )
 
 
@@ -42,7 +43,8 @@ def run_detail(request: Request, run_id: int):
     if run is None:
         raise HTTPException(status_code=404, detail=f"no run {run_id}")
     return TEMPLATES.TemplateResponse(
-        request, "run.html", {"run": run, "steps": repo.get_steps(run_id)}
+        request, "run.html",
+        {"run": run, "steps": repo.get_steps(run_id), "active": "runs"},
     )
 
 
@@ -50,7 +52,9 @@ def run_detail(request: Request, run_id: int):
 def benchmark(request: Request):
     latest = RESULTS_DIR / "latest.json"
     report = json.loads(latest.read_text(encoding="utf-8")) if latest.exists() else None
-    return TEMPLATES.TemplateResponse(request, "benchmark.html", {"report": report})
+    return TEMPLATES.TemplateResponse(
+        request, "benchmark.html", {"report": report, "active": "benchmark"}
+    )
 
 
 @app.get("/shot/{run_id}/{name}")

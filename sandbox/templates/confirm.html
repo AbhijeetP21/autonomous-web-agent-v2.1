@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% import "_icons.html" as ic %}
 {% block title %}Confirm{% endblock %}
 {% block content %}
 <div class="card">
-  <h1>Checkout — step 3 of 3: Review</h1>
+  <h1>{{ ic.icon('cart', 18) }} Checkout — step 3 of 3: Review</h1>
   <p class="muted">Shipping to</p>
   <p><strong>{{ data.full_name }}</strong><br>{{ data.address }}</p>
   <p class="muted">Paying with</p>

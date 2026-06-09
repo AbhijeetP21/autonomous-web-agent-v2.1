@@ -1,31 +1,50 @@
 {% extends "base.html" %}
+{% import "_icons.html" as ic %}
 {% block title %}Runs{% endblock %}
 {% block content %}
-<h1>Runs</h1>
-<div class="cards">
-  <div class="stat"><div class="n">{{ stats.total }}</div><div class="l">completed runs</div></div>
-  <div class="stat"><div class="n">{{ '%.0f' % (stats.success_rate * 100) }}%</div>
-       <div class="l">success rate ({{ stats.successes }}/{{ stats.total }})</div></div>
-  <div class="stat"><div class="n">{{ stats.avg_steps }}</div><div class="l">avg steps</div></div>
-  <div class="stat"><div class="n">{{ stats.recovered_runs }}</div>
-       <div class="l">runs with recovery</div></div>
+<div class="page-head">
+  <h1>{{ ic.icon('list', 18) }} Runs</h1>
+  <div class="desc">Every agent run, its outcome, and aggregate reliability.</div>
 </div>
 
-<table>
-  <thead><tr><th>#</th><th>Status</th><th>Steps</th><th>Rec.</th><th>Goal</th><th>Started</th></tr></thead>
-  <tbody>
-  {% for r in runs %}
-    <tr>
-      <td><a href="/runs/{{ r.id }}">{{ r.id }}</a></td>
-      <td><span class="badge s-{{ r.status }}">{{ r.status }}</span></td>
-      <td>{{ r.total_steps }}</td>
-      <td>{{ r.recovered }}</td>
-      <td><a href="/runs/{{ r.id }}">{{ r.goal[:70] }}</a></td>
-      <td class="muted">{{ (r.started_at or '')[:19] }}</td>
-    </tr>
-  {% else %}
-    <tr><td colspan="6" class="muted">No runs yet. Try: <code>web-agent run "…" --target …</code></td></tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="cards">
+  <div class="stat">
+    <span class="ico">{{ ic.icon('cpu', 18) }}</span>
+    <div class="val">{{ stats.total }}</div><div class="lbl micro">Completed runs</div>
+  </div>
+  <div class="stat">
+    <span class="ico">{{ ic.icon('check-circle', 18) }}</span>
+    <div class="val">{{ '%.0f' % (stats.success_rate * 100) }}%</div>
+    <div class="lbl micro">Success ({{ stats.successes }}/{{ stats.total }})</div>
+  </div>
+  <div class="stat">
+    <span class="ico">{{ ic.icon('footprints', 18) }}</span>
+    <div class="val">{{ stats.avg_steps }}</div><div class="lbl micro">Avg steps</div>
+  </div>
+  <div class="stat">
+    <span class="ico">{{ ic.icon('repeat', 18) }}</span>
+    <div class="val">{{ stats.recovered_runs }}</div><div class="lbl micro">Runs w/ recovery</div>
+  </div>
+</div>
+
+<div class="panel">
+  <table>
+    <thead><tr><th>Run</th><th>Status</th><th>Steps</th><th>Rec.</th><th>Goal</th><th>Started</th></tr></thead>
+    <tbody>
+    {% for r in runs %}
+      <tr>
+        <td class="id-cell"><a href="/runs/{{ r.id }}">#{{ r.id }}</a></td>
+        <td><span class="badge b-{{ r.status }}">{{ ic.status_icon(r.status) }} {{ r.status }}</span></td>
+        <td class="num">{{ r.total_steps }}</td>
+        <td class="num">{{ r.recovered }}</td>
+        <td class="goal-cell"><a href="/runs/{{ r.id }}">{{ r.goal[:72] }}</a></td>
+        <td class="sub mono">{{ (r.started_at or '')[:19] }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="6" class="empty">No runs yet. Try
+        <code>web-agent run "…" --target …</code></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

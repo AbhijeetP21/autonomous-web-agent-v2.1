@@ -1,51 +1,133 @@
+{% import "_icons.html" as ic %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Run traces{% endblock %} · Web Agent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root { --bg:#0f172a; --card:#1e293b; --ink:#e2e8f0; --muted:#94a3b8;
-            --accent:#38bdf8; --ok:#22c55e; --err:#f87171; --warn:#fbbf24; --line:#334155; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--ink); }
-    header { background:var(--card); border-bottom:1px solid var(--line); padding:14px 28px;
-             display:flex; gap:22px; align-items:center; }
-    header .brand { font-weight:800; margin-right:auto; }
-    header a { color:var(--accent); text-decoration:none; font-weight:600; }
-    main { max-width:1000px; margin:28px auto; padding:0 20px; }
-    h1 { font-size:22px; } h2 { font-size:17px; color:var(--muted); }
-    a { color:var(--accent); }
-    .cards { display:flex; gap:16px; flex-wrap:wrap; margin:18px 0; }
-    .stat { background:var(--card); border:1px solid var(--line); border-radius:12px;
-            padding:16px 22px; min-width:150px; }
-    .stat .n { font-size:28px; font-weight:800; }
-    .stat .l { color:var(--muted); font-size:13px; }
-    table { width:100%; border-collapse:collapse; background:var(--card);
-            border:1px solid var(--line); border-radius:12px; overflow:hidden; }
-    th, td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); font-size:14px; }
-    th { color:var(--muted); font-weight:600; }
-    .badge { padding:2px 10px; border-radius:999px; font-size:12px; font-weight:700; }
-    .s-success { background:rgba(34,197,94,.15); color:var(--ok); }
-    .s-failed  { background:rgba(248,113,113,.15); color:var(--err); }
-    .s-stuck   { background:rgba(251,191,36,.15); color:var(--warn); }
-    .s-running, .s-interrupted, .s-pending { background:rgba(56,189,248,.15); color:var(--accent); }
-    .step { background:var(--card); border:1px solid var(--line); border-radius:12px;
-            padding:16px; margin-bottom:14px; display:flex; gap:16px; }
-    .step img { width:280px; border-radius:8px; border:1px solid var(--line); align-self:flex-start; }
-    .step .body { flex:1; }
-    .step .act { font-weight:700; }
-    .muted { color:var(--muted); font-size:13px; }
-    .err { color:var(--err); }
-    code { background:#0b1220; padding:1px 6px; border-radius:6px; }
+    :root {
+      --bg:#0a0c10; --surface:#0f1318; --surface-2:#141a21; --elevate:#19212b;
+      --border:#1b232d; --border-strong:#2a3441;
+      --text:#c6ced8; --text-strong:#eef2f7; --muted:#697483;
+      --accent:#4d7cfe; --accent-dim:rgba(77,124,254,.14);
+      --ok:#3fb950; --ok-bg:rgba(63,185,80,.12);
+      --err:#f0596a; --err-bg:rgba(240,89,106,.12);
+      --warn:#d8a23a; --warn-bg:rgba(216,162,58,.12);
+      --info:#4d7cfe; --info-bg:rgba(77,124,254,.12);
+      --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+      --sans:'Inter',-apple-system,'Segoe UI',Roboto,sans-serif;
+    }
+    * { box-sizing:border-box; }
+    html,body { margin:0; }
+    body { background:var(--bg); color:var(--text); font-family:var(--sans);
+           font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+    a { color:var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .icon { display:inline-block; vertical-align:-2px; flex:none; }
+    .mono { font-family:var(--mono); font-variant-numeric:tabular-nums; }
+    .micro { text-transform:uppercase; font-size:11px; letter-spacing:.07em;
+             color:var(--muted); font-weight:600; }
+
+    /* Top bar */
+    .topbar { height:56px; display:flex; align-items:center; gap:8px; padding:0 24px;
+              background:var(--surface); border-bottom:1px solid var(--border);
+              position:sticky; top:0; z-index:10; }
+    .brand { display:flex; align-items:center; gap:9px; font-weight:700;
+             color:var(--text-strong); letter-spacing:-.01em; margin-right:auto; }
+    .brand .mark { display:grid; place-items:center; width:28px; height:28px; border-radius:6px;
+                   background:var(--accent-dim); color:var(--accent); }
+    .brand .sub { color:var(--muted); font-weight:500; font-size:12px;
+                  border-left:1px solid var(--border-strong); padding-left:9px; }
+    .nav { display:flex; gap:4px; }
+    .nav a { display:flex; align-items:center; gap:7px; padding:7px 12px; border-radius:6px;
+             color:var(--muted); font-weight:500; }
+    .nav a:hover { color:var(--text-strong); background:var(--surface-2); text-decoration:none; }
+    .nav a.active { color:var(--text-strong); background:var(--accent-dim); }
+
+    main { max-width:1080px; margin:0 auto; padding:32px 24px 64px; }
+    .page-head { margin-bottom:20px; }
+    .page-head h1 { font-size:19px; font-weight:600; color:var(--text-strong); margin:0;
+                    letter-spacing:-.01em; display:flex; align-items:center; gap:9px; }
+    .page-head .desc { color:var(--muted); font-size:13px; margin-top:6px; }
+
+    /* Stat cards */
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+             gap:12px; margin:18px 0 26px; }
+    .stat { background:var(--surface); border:1px solid var(--border); border-radius:8px;
+            padding:14px 16px; position:relative; }
+    .stat .ico { position:absolute; top:14px; right:14px; color:var(--muted); opacity:.6; }
+    .stat .val { font-size:26px; font-weight:600; color:var(--text-strong);
+                 font-family:var(--mono); font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+    .stat .lbl { margin-top:3px; }
+
+    /* Tables */
+    .panel { background:var(--surface); border:1px solid var(--border); border-radius:8px;
+             overflow:hidden; }
+    table { width:100%; border-collapse:collapse; }
+    thead th { text-align:left; padding:11px 16px; background:var(--surface-2);
+               border-bottom:1px solid var(--border); text-transform:uppercase;
+               font-size:11px; letter-spacing:.06em; color:var(--muted); font-weight:600; }
+    tbody td { padding:12px 16px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    tbody tr:last-child td { border-bottom:0; }
+    tbody tr:hover { background:var(--surface-2); }
+    td.num { font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--text); }
+    .id-cell a { font-family:var(--mono); color:var(--muted); }
+    .goal-cell { color:var(--text-strong); }
+    .sub { color:var(--muted); font-size:12px; }
+
+    /* Badges */
+    .badge { display:inline-flex; align-items:center; gap:5px; padding:3px 8px; border-radius:5px;
+             font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.03em;
+             border:1px solid transparent; }
+    .b-success { color:var(--ok); background:var(--ok-bg); border-color:rgba(63,185,80,.25); }
+    .b-failed  { color:var(--err); background:var(--err-bg); border-color:rgba(240,89,106,.25); }
+    .b-stuck   { color:var(--warn); background:var(--warn-bg); border-color:rgba(216,162,58,.25); }
+    .b-running,.b-interrupted,.b-pending {
+             color:var(--info); background:var(--info-bg); border-color:rgba(77,124,254,.25); }
+
+    /* Trace */
+    .meta-line { color:var(--muted); font-size:13px; margin:4px 0 0; }
+    .meta-line .chip { font-family:var(--mono); color:var(--text); background:var(--surface-2);
+                       border:1px solid var(--border); border-radius:4px; padding:1px 6px; }
+    .trace { margin-top:8px; display:flex; flex-direction:column; gap:10px; }
+    .step { display:flex; gap:0; background:var(--surface); border:1px solid var(--border);
+            border-radius:8px; overflow:hidden; }
+    .step .rail { width:48px; flex:none; display:flex; flex-direction:column; align-items:center;
+                  padding:14px 0; background:var(--surface-2); border-right:1px solid var(--border);
+                  font-family:var(--mono); color:var(--muted); font-size:13px; }
+    .step .shot { width:300px; flex:none; border-right:1px solid var(--border); background:#000; }
+    .step .shot img { display:block; width:100%; height:auto; }
+    .step .body { flex:1; padding:14px 16px; min-width:0; }
+    .step .act { display:flex; align-items:center; gap:8px; color:var(--text-strong);
+                 font-weight:600; }
+    .step .act .t { font-family:var(--mono); font-size:12px; color:var(--accent);
+                    background:var(--accent-dim); padding:2px 7px; border-radius:4px; }
+    .step .act .lat { margin-left:auto; color:var(--muted); font-weight:400; font-size:12px;
+                      font-family:var(--mono); }
+    .kv { margin-top:9px; font-size:13px; }
+    .kv .k { color:var(--muted); }
+    .kv code { font-family:var(--mono); font-size:12px; background:var(--surface-2);
+               border:1px solid var(--border); border-radius:4px; padding:1px 6px; color:var(--text); }
+    .err-text { color:var(--err); }
+    .empty { padding:40px; text-align:center; color:var(--muted); }
+    code { font-family:var(--mono); }
   </style>
 </head>
 <body>
-  <header>
-    <span class="brand">📊 Web Agent — Run Traces</span>
-    <a href="/">Runs</a>
-    <a href="/benchmark">Benchmark</a>
-  </header>
+  <div class="topbar">
+    <span class="brand">
+      <span class="mark">{{ ic.icon('activity', 17) }}</span>
+      Web Agent <span class="sub">Run Traces</span>
+    </span>
+    <nav class="nav">
+      <a href="/" class="{{ 'active' if active == 'runs' else '' }}">{{ ic.icon('list') }} Runs</a>
+      <a href="/benchmark" class="{{ 'active' if active == 'benchmark' else '' }}">{{ ic.icon('bar-chart') }} Benchmark</a>
+    </nav>
+  </div>
   <main>{% block content %}{% endblock %}</main>
 </body>
 </html>

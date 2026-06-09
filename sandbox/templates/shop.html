@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{% import "_icons.html" as ic %}
 {% block title %}Cart{% endblock %}
 {% block content %}
 <div class="card">
-  <h1>Your cart</h1>
+  <h1>{{ ic.icon('cart', 18) }} Your cart</h1>
   <ul>
     <li><span class="todo-text">Sauce Labs Backpack</span><span>$29.99</span></li>
     <li><span class="todo-text">Bolt T-Shirt</span><span>$15.99</span></li>
   </ul>
   <p class="muted">Total: <strong>$45.98</strong></p>
-  <a href="/checkout/shipping"><button type="button">Checkout</button></a>
+  <a href="/checkout/shipping"><button type="button">Checkout {{ ic.icon('arrow-right', 15) }}</button></a>
 </div>
 {% endblock %}

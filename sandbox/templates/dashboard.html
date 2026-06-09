@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% import "_icons.html" as ic %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <div class="card">
-  <h1 class="ok" id="welcome">Welcome, {{ username }}!</h1>
+  <h1 class="ok" id="welcome">{{ ic.icon('check-circle', 18) }} Welcome, {{ username }}!</h1>
   <p class="muted">You are signed in. This is the protected dashboard.</p>
   <a href="/logout"><button type="button" class="secondary">Log out</button></a>
 </div>

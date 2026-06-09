@@ -1,14 +1,27 @@
 {% extends "base.html" %}
+{% import "_icons.html" as ic %}
 {% block title %}Home{% endblock %}
 {% block content %}
 <div class="card">
-  <h1>Agent Sandbox</h1>
-  <p class="muted">A deterministic, offline multi-page site for exercising the autonomous web agent.
-     Three flows, all with stable, accessible labels.</p>
-  <ul>
-    <li><a href="/todo">📝 Todo app</a> — add, complete, and delete tasks.</li>
-    <li><a href="/shop">🛒 Checkout</a> — a multi-step form (shipping → payment → confirm).</li>
-    <li><a href="/login">🔑 Login</a> — sign in then reach the dashboard.</li>
-  </ul>
+  <h1>{{ ic.icon('box', 18) }} Agent Sandbox</h1>
+  <p class="muted">A deterministic, offline multi-page site for exercising the autonomous web
+     agent. Three flows, all with stable, accessible labels.</p>
+  <div class="tiles">
+    <a class="tile" href="/todo">
+      <span class="t-ico">{{ ic.icon('check-square', 20) }}</span>
+      <span><span class="t-title">Todo app</span><br>
+        <span class="t-desc">Add, complete, and delete tasks.</span></span>
+    </a>
+    <a class="tile" href="/shop">
+      <span class="t-ico">{{ ic.icon('cart', 20) }}</span>
+      <span><span class="t-title">Checkout</span><br>
+        <span class="t-desc">A multi-step form: shipping → payment → confirm.</span></span>
+    </a>
+    <a class="tile" href="/login">
+      <span class="t-ico">{{ ic.icon('login', 20) }}</span>
+      <span><span class="t-title">Login</span><br>
+        <span class="t-desc">Sign in, then reach the dashboard.</span></span>
+    </a>
+  </div>
 </div>
 {% endblock %}

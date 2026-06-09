@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% import "_icons.html" as ic %}
 {% block title %}Order complete{% endblock %}
 {% block content %}
 <div class="card">
-  <h1 class="ok">✅ Order confirmed</h1>
+  <h1 class="ok">{{ ic.icon('check-circle', 18) }} Order confirmed</h1>
   <p id="order-status">Thank you, {{ data.full_name or 'customer' }}! Your order
      <strong>#{{ order_id }}</strong> has been placed.</p>
   <a href="/"><button type="button" class="secondary">Back to home</button></a>

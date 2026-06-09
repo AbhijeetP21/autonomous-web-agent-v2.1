@@ -12,6 +12,9 @@ measures task success, steps-to-completion, and recovery rate across repeated ru
 <!-- Demo GIF: a multi-step sandbox task completed autonomously, with the trace visible. -->
 ![Demo](docs/demo.gif)
 
+*The agent autonomously adding and completing a todo (MiniMax M3). Full-resolution screen
+recording: [`docs/demo.webm`](docs/demo.webm).*
+
 ## Why it's built this way
 
 **Perception via the accessibility tree, not raw HTML.** Feeding raw HTML to an LLM is
@@ -115,7 +118,7 @@ Dashboard and benchmark:
 ```bash
 mise run dashboard     # http://127.0.0.1:8001  (runs, traces, success rate)
 mise run benchmark     # runs the suite N times; writes benchmark/results/
-# include the public saucedemo.com generalization tasks:
+# include the public generalization tasks (saucedemo.com + the-internet.herokuapp.com):
 mise exec -- python -m benchmark.run_benchmark --runs 5 --include-public
 ```
 
@@ -158,22 +161,28 @@ each task N times and reports **task success rate**, **mean steps-to-completion*
 rate** (of the runs where the reliability layer fired, how many still succeeded). Results land in
 `benchmark/results/` and render at `/benchmark` in the dashboard.
 
-Measured run (MiniMax M3, 3 runs/task — includes the public saucedemo.com generalization tasks):
+Measured run (MiniMax M3, 3 runs/task — includes two public sites, **saucedemo.com** and
+**the-internet.herokuapp.com**, as generalization tasks):
 
 ![Benchmark](docs/benchmark.png)
 
 | Task | Success | Mean steps | Recovery fired → succeeded |
 |------|---------|-----------|----------------------------|
-| todo_add_complete | 100% (3/3) | 3.7 | — |
+| todo_add_complete | 100% (3/3) | 5.3 | 2 → 100% |
 | checkout_complete (3-step form) | 100% (3/3) | 9.0 | — |
-| login_dashboard | 100% (3/3) | 4.0 | — |
-| saucedemo_login (public site) | 100% (3/3) | 4.0 | — |
-| saucedemo_add_to_cart (public site) | 100% (3/3) | 20.3 | 3 → 100% |
-| **Overall** | **100% (15/15)** | **8.2** | **3 → 100%** |
+| login_dashboard | 100% (3/3) | 3.7 | — |
+| saucedemo_login (public) | 100% (3/3) | 4.3 | — |
+| saucedemo_add_to_cart (public) | 33% (1/3) | 15.0 | 1 → 0% |
+| herokuapp_login (public) | 100% (3/3) | 4.0 | — |
+| herokuapp_add_remove (public, dynamic DOM) | 100% (3/3) | 3.7 | — |
+| **Overall** | **90% (19/21)** | **5.5** | **3 → 67%** |
 
-The hardest task (a real multi-step flow on saucedemo.com) triggered the recovery path in every
-run and still completed every time — which is the whole point: the agent is measured, and it
-recovers.
+Every deterministic local task and both the-internet.herokuapp.com tasks passed all runs. The one
+soft spot was the longest real-world flow — saucedemo's log-in→add-to-cart→open-cart (≈15–20
+actions) — which succeeded 1 of 3 times. That variance is the point: a single green demo hides it,
+and only running each task repeatedly surfaces *which* task is fragile and by how much. Numbers will
+vary run to run (live model, live sites); regenerate with `python -m benchmark.run_benchmark
+--runs 5 --include-public`.
 
 > Measuring an agent's reliability across runs is what separates an engineer from someone who got
 > a demo to work once. The benchmark is the load-bearing artifact here.
@@ -193,4 +202,4 @@ without network access. A live-LLM test runs automatically when `LLM_API_KEY` is
 
 Config-ready for [SynapticaAI](https://github.com/) (it will expose an OpenAI-compatible endpoint;
 no integration code yet). Out of scope: full browser-state snapshot/restore, captcha solving,
-authenticated real-world sites beyond saucedemo, multi-tab orchestration.
+authenticated real-world sites beyond saucedemo.com / the-internet.herokuapp.com, multi-tab orchestration.

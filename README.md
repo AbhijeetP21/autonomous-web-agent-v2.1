@@ -200,6 +200,6 @@ without network access. A live-LLM test runs automatically when `LLM_API_KEY` is
 
 ## Scope / non-goals
 
-Config-ready for [SynapticaAI](https://github.com/) (it will expose an OpenAI-compatible endpoint;
-no integration code yet). Out of scope: full browser-state snapshot/restore, captcha solving,
+Config-ready for any OpenAI-compatible endpoint (no provider-specific code). Out of scope: full
+browser-state snapshot/restore, captcha solving,
 authenticated real-world sites beyond saucedemo.com / the-internet.herokuapp.com, multi-tab orchestration.

@@ -25,8 +25,8 @@ benchmark/results/*.md
 .pytest_cache/
 .ruff_cache/
 
-# Claude local state (keep launch.json)
-.claude/*.lock
+# Local editor / tooling config (not part of the project)
+.claude/
 
 # OS
 Thumbs.db

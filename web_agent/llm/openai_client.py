@@ -1,4 +1,4 @@
-"""OpenAI-compatible client (OpenRouter/DeepSeek today; SynapticaAI later)."""
+"""OpenAI-compatible client (e.g. OpenRouter, DeepSeek, or any OpenAI-shaped endpoint)."""
 
 from __future__ import annotations
 

@@ -3,7 +3,7 @@
 A client takes a system prompt and a single composed user prompt and returns the
 raw ``{reasoning, action}`` object (validated downstream by the planner). Keeping
 the interface this thin means swapping providers — Anthropic-compatible (MiniMax
-today), OpenAI-compatible (OpenRouter/DeepSeek now, SynapticaAI later) — is a
+today), OpenAI-compatible (OpenRouter/DeepSeek, or any OpenAI-shaped endpoint) — is a
 config change, not a code change.
 """
 

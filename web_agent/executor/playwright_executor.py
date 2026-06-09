@@ -24,13 +24,6 @@ class ActionResult(BaseModel):
     terminal: bool = False
 
 
-class ConfirmationRequired(Exception):
-    """Raised when a sensitive action needs user confirmation that wasn't granted."""
-
-
-ConfirmCallback = "callable[[Action], bool] | None"
-
-
 class Executor:
     def __init__(
         self,

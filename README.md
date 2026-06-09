@@ -197,9 +197,3 @@ mise run lint     # ruff
 The suite is deterministic and offline: it drives the agent loop with a scripted (no-LLM) client
 against the local sandbox, so reliability behaviour (recovery, loop-abort, budget) is verified
 without network access. A live-LLM test runs automatically when `LLM_API_KEY` is set.
-
-## Scope / non-goals
-
-Config-ready for any OpenAI-compatible endpoint (no provider-specific code). Out of scope: full
-browser-state snapshot/restore, captcha solving,
-authenticated real-world sites beyond saucedemo.com / the-internet.herokuapp.com, multi-tab orchestration.
